@@ -61,7 +61,8 @@ app.get("/data/:temp/", function (req, res) {
   res.end();
 }) 
 
-server.listen(3000, () => console.log('Listening on port 3000!'))
+var port =  process.env.port || 3000;
+server.listen(port, () => console.log('Listening on port 3000!'))
 
 function request(url, returnBuffer = true, timeout = 10000) {
   return new Promise(function(resolve, reject) {
