@@ -59,7 +59,7 @@ app.get("/data/:temp/", function (req, res) {
   res.end();
 }) 
 
-var port =  process.env.port || 3000;
+var port =  process.env.PORT || 3000;
 server.listen(port, () => console.log('Listening on port 3000!'))
 
 function request(url, returnBuffer = true, timeout = 10000) {
