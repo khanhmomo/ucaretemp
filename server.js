@@ -63,6 +63,7 @@ io.on('connection', function(socket){
 
 app.get('/',(req, res) => res.render('main'));
 app.get('/index',(req, res) => res.render('index'));
+app.get('/webcamlive',(req, res) => res.render('webcamlive'));
 
 app.post('/fetch_external_image', async (req, res) => {
   const { imageUrl } = req.body

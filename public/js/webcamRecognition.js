@@ -1,4 +1,4 @@
-const persons = ["penny", "howard", "sheldon", "leonard", "emil", "180039_", "180040_"];
+const persons = ["180039_", "180040_"];
 //number of photos for the training
 const NUMBER_OF_PHOTOS = 5;
 
