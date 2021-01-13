@@ -36,26 +36,84 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
-
+        <script src="face-api.js"></script>
+        <script src="js/commons.js"></script>
+        <script src="js/drawing.js"></script>
+        <script src="js/faceDetectionControls.js"></script>
+        <script src="js/webcamRecognition.js"></script>
         <script>
-          
+            var res;
             $(document).ready(function() {
               
                 var socket = io();
-                socket.emit("sta", "OK");
+                socket.emit("sta", res);
                 socket.on ("sta_back", function (data) {
 
                     $("#data_temp").empty();
                     $("#data_temp").append(data.data_temp);
+                    $("#data_user").empty();
+                    $("#data_user").append(data.data_user);
 
-                    socket.emit ("sta","OK");
+                    socket.emit ("sta",res);
 
                 })
             });
-        </script>
+            async function onPlay() {
+          const videoEl = document.getElementById('inputVideo');
+          if(videoEl.paused || videoEl.ended || !isFaceDetectionModelLoaded())
+            return setTimeout(() => onPlay());
+          
+          const options = getFaceDetectorOptions();
+          const result = await faceapi.detectSingleFace(videoEl, options).withFaceLandmarks().withFaceDescriptor();
+    
+          if (result) {
 
+            $(document).ready(function() {
+
+                var str = faceMatcher.findBestMatch(result.descriptor).toString();
+                var pos = str.search("_");
+                res = str.slice(0, pos);
+                
+                $("#data_name").empty();
+                $("#data_name").append(res);
+            
+                
+            });
+
+
+          }
+
+          setTimeout(() => onPlay());
+
+          
+        }
+    
+        async function run() {
+          // load face detection model
+    
+          await changeFaceDetector(TINY_FACE_DETECTOR);
+    
+          await faceapi.loadFaceLandmarkModel('/');
+          await faceapi.loadFaceRecognitionModel('/');
+    
+          faceMatcher = await createFaceMatcher(1);
+    
+          // try to access users webcam and stream the images
+          // to the video element
+          const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+          const videoEl = document.getElementById('inputVideo');
+          videoEl.srcObject = stream;
+        }
+    
+        document.addEventListener("DOMContentLoaded", function() {
+          run();
+        });
+        </script>
+ 
+        
     </head>
     <body>
+        
         <hello>
         <div>
         
@@ -79,6 +137,7 @@
                 </div>
             </div>
         </div>
+        
         <div2>
                 <div class="container">
                  
@@ -86,36 +145,39 @@
                         <p style = "color:#fff">TEMP MONITOR</p>
                     </h3>
                     
+
+
+                    
+
                     <div class="container emp-profile">
                             <form method="post">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <div class="profile-img">
-                                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" alt=""/>
-                                        </div>
+                                        <div style="position: relative" class="margin">
+                                            <video onplay="onPlay(this)" id="inputVideo" autoplay muted width="300"></video>
+                                
+                                          </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="profile-head">
                                                     <h5>
-                                                        <b>TRẦN AN KHÁNH</b>
+                                                        <b><a id = "data_user"></a></b>
                                                     </h5>
                                                     <h6>
                                                         STUDENT
                                                     </h6>
-                                                    
                                                     <p>
                                                         TEMP: 
                                                         <span style = "color:red"> <b><a id = "data_temp"></a> </b></span>
                                                     </p>
                                         </div>
                                     </div>
-
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="profile-work">
                                             <p>STUDENT INFO</p>
-                                            <a href="">Name: Trần An Khánh</a><br/>
+                                            <a href="">ID: </a> <a id = "data_name"></a><br/>
                                             <a href="">Gender: Nam</a><br/>
                                             <a href="">Class: 12A2</a><br/>
                                 
@@ -124,12 +186,8 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="tab-content profile-tab" id="myTabContent">
-                                            
-                                                
-                                                  </table>
-                      
 
-                                                 
+                                                  </table>
                                                   <p>LOG</p>
                                                   <table class="table table-sm">
                                                     <thead>
@@ -232,4 +290,9 @@
         <script src="js/custom.js"></script>
         </hello>
     </body>
+    <script>
+        
+      </script>
+      </body>
+    
 </html>

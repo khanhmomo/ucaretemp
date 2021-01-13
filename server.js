@@ -12,12 +12,21 @@ app.use(express.static(viewsDir))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, 'weights')))
 app.use(express.static(path.join(__dirname, 'dist')))
+app.use(express.static(path.join(__dirname, 'images')));
 
 app.set("view engine", "ejs");
 
+
 var server = require("http").createServer(app);
 
+
 var temp = 0;
+var user = "Unknown";
+
+const ofirebase = require("./public/js/setData.js");
+const ogetData = require("./public/js/getData.js");
+
+var id_user;
 
 var io = require('socket.io')(server);
 io.on('connection', function(socket){
@@ -27,14 +36,33 @@ io.on('connection', function(socket){
     });
 
     socket.on ("sta", function (data) {
-		io.sockets.emit ("sta_back",{data_temp: temp});
+
+      id_user = data;
+      var username = id_user;
+      var status = 2;
+      if (username == null) user = "Unknown";
+      else status = username.search("known");
+      if (status != 2) {
+        ogetData._getData({"username": username}, function(data) {
+          user = data;
+ 
+        })
+        io.sockets.emit ("sta_back",{data_temp: temp, data_user: user});
+      }
+      else {
+
+        user = "Unknown";
+        io.sockets.emit ("sta_back",{data_temp: temp, data_user: user});
+      }
+      
     });
 
 });
 
-app.get('/', (req, res) => res.render('main'))
-app.get('/index',(req, res) => res.render('webcamFaceDetection'));
-app.get('/temp',(req, res) => res.render('index'));
+
+
+app.get('/',(req, res) => res.render('main'));
+app.get('/index',(req, res) => res.render('index'));
 
 app.post('/fetch_external_image', async (req, res) => {
   const { imageUrl } = req.body
@@ -50,14 +78,7 @@ app.post('/fetch_external_image', async (req, res) => {
   }
 })
 
-app.get("/data/:temp/", function (req, res) {
-  temp = req.params.temp; 
 
-  console.log("DATA INCOMING......!!!!");
-  console.log(temp);
-  res.send("DATA SEND OK!");
-  res.end();
-}) 
 
 var port =  process.env.PORT || 3000;
 server.listen(port, () => console.log('Listening on port 3000!'))
@@ -83,3 +104,44 @@ function request(url, returnBuffer = true, timeout = 10000) {
     })
   })
 }
+
+
+app.post("/savedata/", function(req, res) {
+
+  var inputuser = req.body;
+  inputuser["username"] = id_user;
+  console.log(inputuser);
+  ofirebase.saveData(req.body, function(err,data) {
+    temp = data.temp;
+    var username = id_user;
+    console.log(username);
+    
+    res.send(data);
+    
+    res.end();
+  });
+});
+
+function request(url, returnBuffer = true, timeout = 10000) {
+  return new Promise(function(resolve, reject) {
+    const options = Object.assign(
+      {},
+      {
+        url,
+        isBuffer: true,
+        timeout,
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
+        }
+      },
+      returnBuffer ? { encoding: null } : {}
+    );
+
+    get(options, function(err, res) {
+      if (err) return reject(err);
+      return resolve(res);
+    });
+  });
+}
+
