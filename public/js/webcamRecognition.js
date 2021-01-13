@@ -27,6 +27,8 @@ async function createFaceMatcher(numImagesForTraining = NUMBER_OF_PHOTOS) {
 
   var faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors);
 
+
+  
   return faceMatcher;
 }
 

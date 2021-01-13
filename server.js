@@ -79,8 +79,6 @@ app.post('/fetch_external_image', async (req, res) => {
   }
 })
 
-
-
 var port =  process.env.PORT || 3000;
 server.listen(port, () => console.log('Listening on port 3000!'))
 
