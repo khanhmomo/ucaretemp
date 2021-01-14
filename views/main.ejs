@@ -17,7 +17,23 @@
     <link href="css/style.css" rel="stylesheet" />    
     <!-- Google	Fonts -->
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css' />
-    
+    <?xml version="1.0" encoding="UTF-8"?>
+    <configuration>
+        <system.webServer>
+            <rewrite>
+                <rules>
+                    <clear />
+                    <rule name="Redirect to https" stopProcessing="true">
+                        <match url="(.*)" />
+                        <conditions>
+                            <add input="{HTTPS}" pattern="off" ignoreCase="true" />
+                        </conditions>
+                        <action type="Redirect" url="https://{HTTP_HOST}{REQUEST_URI}" redirectType="Permanent" appendQueryString="false" />
+                    </rule>
+                </rules>
+            </rewrite>
+        </system.webServer>
+    </configuration>
 </head>
 <body >
    

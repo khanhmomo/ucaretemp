@@ -108,6 +108,7 @@ function request(url, returnBuffer = true, timeout = 10000) {
 app.post("/savedata/", function(req, res) {
 
   var inputuser = req.body;
+  
   inputuser["username"] = id_user;
   console.log(inputuser);
   ofirebase.saveData(req.body, function(err,data) {
