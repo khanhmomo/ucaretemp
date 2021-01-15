@@ -53,7 +53,9 @@
                     $("#data_temp").append(data.data_temp);
                     $("#data_user").empty();
                     $("#data_user").append(data.data_user);
-
+                    if (data.alert == 1) {
+                        alert("HIGH TEMPERATURE DETECT!");
+                    }
                     socket.emit ("sta",res);
 
                 })

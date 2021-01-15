@@ -3,6 +3,17 @@ const path = require('path');
 const { listenerCount } = require('process');
 const { get } = require('request')
 const app = express()
+const nodemailer = require('nodemailer');
+
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'ankhanhct@gmail.com',
+    pass: 'Khanhmomo2552003'
+  }
+});
+
+
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -27,8 +38,10 @@ const ofirebase = require("./public/js/setData.js");
 const ogetData = require("./public/js/getData.js");
 
 var id_user;
+var stat = 0;
 
 var io = require('socket.io')(server);
+
 io.on('connection', function(socket){
     console.log('a user connected');
     socket.on('disconnect', function(){
@@ -36,25 +49,25 @@ io.on('connection', function(socket){
     });
 
     socket.on ("sta", function (data) {
-
+      console.log(stat);
       id_user = data;
       var username = id_user;
       var status = 2;
       if (username == null) user = "Unknown";
       else status = username.search("known");
+
+      
       if (status != 2) {
         ogetData._getData({"username": username}, function(data) {
           user = data;
- 
         })
-        io.sockets.emit ("sta_back",{data_temp: temp, data_user: user});
+        io.sockets.emit ("sta_back",{data_temp: temp, data_user: user, alert: stat});
       }
       else {
-
         user = "Unknown";
-        io.sockets.emit ("sta_back",{data_temp: temp, data_user: user});
+        io.sockets.emit ("sta_back",{data_temp: temp, data_user: user, alert: stat});
       }
-      
+      stat = 0;
     });
 
 });
@@ -113,9 +126,33 @@ app.post("/savedata/", function(req, res) {
   console.log(inputuser);
   ofirebase.saveData(req.body, function(err,data) {
     temp = data.temp;
+    
     var username = id_user;
     console.log(username);
     
+    if (temp > 37.5) {
+      stat = 1;
+      var mailOption = {
+        from: 'ankhanhct@gmail.com',
+        to: 'ankhanhct@gmail.com',
+        subject: 'ALERT FROM UCARETEMP - HIGH TEMP DETECTED!',
+        text: 'Your student: ' + id_user + ' is having Covid - 19 sign!'
+      }
+      transporter.sendMail(mailOption, function(error, info) {
+        if (error) {
+          console.log(error);
+        }
+        else {
+          console.log('Email send: ' + info.response);
+        }
+        
+        
+      })
+
+    }
+    else {
+      stat = 0;
+    }
     res.send(data);
     
     res.end();
