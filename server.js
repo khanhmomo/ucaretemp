@@ -56,6 +56,8 @@ io.on('connection', function(socket){
       if (username == null) user = "Unknown";
       else status = username.search("known");
 
+
+      
       
       if (status != 2) {
         ogetData._getData({"username": username}, function(data) {
