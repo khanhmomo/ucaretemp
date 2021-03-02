@@ -77,8 +77,17 @@ io.on('connection', function(socket){
 app.get('/',(req, res) => res.render('main'));
 app.get('/index',(req, res) => res.render('index'));
 app.get('/webcamlive',(req, res) => res.render('webcamlive'));
+app.get('/login',(req, res) => res.render('login'));
+app.get('/signup',(req, res) => res.render('signup'));
 
 
+app.post("/login", function(req, res) {
+  var acc = req.body.account;
+  var pas = req.body.password;
+  if (acc == "admin" && pas == "admin") res.render('index');
+  acc = '';
+  pas = ''
+});
 app.post('/fetch_external_image', async (req, res) => {
   const { imageUrl } = req.body
   if (!imageUrl) {
@@ -154,6 +163,27 @@ app.post("/savedata/", function(req, res) {
     else {
       stat = 0;
     }
+    res.send(data);
+    
+    res.end();
+  });
+});
+app.post("/signup/", function(req, res) {
+
+  var inputuser = req.body;
+  
+  inputuser["idstudent"] = id_user;
+  console.log(inputuser);
+  ofirebase.saveData(req.body, function(err,data) {
+    ho = req.body.first_name;
+    ten =  req.body.last_name;
+    ngaysinh =  req.body.birthday;
+    gioitinh =  req.body.gender;
+    email =  req.body.email;
+    sodienthoai =  req.body.phone;
+    tinhtp =  req.body.flatform;
+    var username = id_user;
+    console.log(username);
     res.send(data);
     
     res.end();
