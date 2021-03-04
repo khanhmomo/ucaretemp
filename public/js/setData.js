@@ -11,5 +11,18 @@ module.exports = {
             temp: req.temp,
         });
         callback(null, {"statuscode":200, "temp":req.temp, "user": username});
+    },
+    saveData2: function(req, callback) {
+        let username = req.id;
+        firebase.database().ref("Student/" + username).set({
+            first_nm: req.first_name,
+            last_nm: req.last_name,
+            dob: req.birthday,
+            gen: req.male,
+            email: req.email,
+            phonenum: req.phone,
+            state: req.flatform,
+        });
+        callback(null, {"statuscode":200, "user": username});
     }
 }

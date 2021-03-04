@@ -180,18 +180,22 @@ var gen;
 var phonenum;
 var state;
 
-app.post("/wawaefwae", function(req, res) {
+app.post("/signup/", function(req, res) {
+  console.log(req);
+  ofirebase.saveData2(req.body, function(err,data) {
+    id = req.body.id;
     first_nm = req.body.first_name;
     last_nm = req.body.last_name;
     dob = req.body.birthday;
-    gen = req.body.gender;
+    gen = req.body.male;
     email = req.body.email;
     phonenum = req.body.phone;
     state = req.body.flatform;
-    console.log(req.body);
+    console.log(req.body); 
 
     res.render('signup');
     res.end();
+  });
 });
 
 function request(url, returnBuffer = true, timeout = 10000) {
