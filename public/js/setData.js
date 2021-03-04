@@ -2,8 +2,6 @@ const firebase = require("./firebase_connect");
 
 var uuid = require('uuid');
 
-
-
 module.exports = {
     saveData: function(req, callback) {
         let username = req.username;

@@ -7,7 +7,8 @@
  
     <title>Signup for Blackjack</title>
 
-
+    <link href="vendor/sweetalert2/dist/sweetalert2.min.js" rel = "stylesheet">
+    
     <link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
     <link href="vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
 
@@ -35,25 +36,22 @@
             <div class="card card-4">
                 <div class="card-body">
                     <h2 class="title">ĐĂNG KÍ HỌC SINH</h2>
-                    <form method="POST">
-                        <div class="row row-space">
-                            <div class="col-2">
-                                <div class="input-group">
-                                    <label class="label">id học sinh</label>
-                                    <input class="input--style-4" type="number" name="idstudent">
-                                </div>
-                            </div>
+                    <form method="POST" onsubmit="noti()">
+                        <div class="input-group">
+                            <label class="label">số báo danh</label>
+                            <input class="input--style-4" type="text" name="id">
+                        </div>
                         <div class="row row-space">
                             <div class="col-2">
                                 <div class="input-group">
                                     <label class="label">họ</label>
-                                    <input class="input--style-4" type="text" name="first_name">
+                                    <input class="input--style-4" type="text" name="last_name">
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="input-group">
                                     <label class="label">tên đệm và tên</label>
-                                    <input class="input--style-4" type="text" name="last_name">
+                                    <input class="input--style-4" type="text" name="first_name">
                                 </div>
                             </div>
                         </div>
@@ -74,11 +72,11 @@
                                     <label class="label">giới tính</label>
                                     <div class="p-t-10">
                                         <label class="radio-container m-r-45">nam
-                                            <input type="radio" checked="checked" name="gender">
+                                            <input type="radio" checked="checked" name="male">
                                             <span class="checkmark"></span>
                                         </label>
                                         <label class="radio-container">nữ
-                                            <input type="radio" name="gender">
+                                            <input type="radio" name="female">
                                             <span class="checkmark"></span>
                                         </label>
                                     </div>
@@ -174,13 +172,20 @@
                             </div>
                         </div>
                         <div class="p-t-15">
-                            <button class="login100-form-btn" type="submit">đăng kí</button>
+                            <button onclick = "noti()" class="login100-form-btn" type="submit">đăng kí</button>
+                            <script>
+                                function noti() {
+                                    alert("Đăng kí thành công!");
+                                };
+                            </script>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+    
 
     <!-- Jquery JS-->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -191,6 +196,6 @@
 
     <!-- Main JS-->
     <script src="js/global.js"></script>
-
+ 
 </body>
 </html>

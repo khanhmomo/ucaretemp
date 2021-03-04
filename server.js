@@ -1,9 +1,11 @@
 const express = require('express')
+
 const path = require('path');
 const { listenerCount } = require('process');
 const { get } = require('request')
 const app = express()
 const nodemailer = require('nodemailer');
+
 
 var transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -36,6 +38,7 @@ var user = "Unknown";
 
 const ofirebase = require("./public/js/setData.js");
 const ogetData = require("./public/js/getData.js");
+const { response } = require('express');
 
 var id_user;
 var stat = 0;
@@ -131,7 +134,7 @@ function request(url, returnBuffer = true, timeout = 10000) {
 app.post("/savedata/", function(req, res) {
 
   var inputuser = req.body;
-  
+  console.log("OK");
   inputuser["username"] = id_user;
   console.log(inputuser);
   ofirebase.saveData(req.body, function(err,data) {
@@ -168,26 +171,27 @@ app.post("/savedata/", function(req, res) {
     res.end();
   });
 });
-app.post("/signup/", function(req, res) {
 
-  var inputuser = req.body;
-  
-  inputuser["idstudent"] = id_user;
-  console.log(inputuser);
-  ofirebase.saveData(req.body, function(err,data) {
-    ho = req.body.first_name;
-    ten =  req.body.last_name;
-    ngaysinh =  req.body.birthday;
-    gioitinh =  req.body.gender;
-    email =  req.body.email;
-    sodienthoai =  req.body.phone;
-    tinhtp =  req.body.flatform;
-    var username = id_user;
-    console.log(username);
-    res.send(data);
-    
+var id;
+var first_nm;
+var last_nm;
+var dob;
+var gen;
+var phonenum;
+var state;
+
+app.post("/wawaefwae", function(req, res) {
+    first_nm = req.body.first_name;
+    last_nm = req.body.last_name;
+    dob = req.body.birthday;
+    gen = req.body.gender;
+    email = req.body.email;
+    phonenum = req.body.phone;
+    state = req.body.flatform;
+    console.log(req.body);
+
+    res.render('signup');
     res.end();
-  });
 });
 
 function request(url, returnBuffer = true, timeout = 10000) {
