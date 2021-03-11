@@ -10,7 +10,7 @@
     <link href="vendor/sweetalert2/dist/sweetalert2.min.js" rel = "stylesheet">
     
     <link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
-    <link href="vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <link href="/vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
 
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
@@ -35,7 +35,7 @@
         <div class="wrapper wrapper--w680">
             <div class="card card-4">
                 <div class="card-body">
-                    <h2 class="title">ĐĂNG KÍ HỌC SINH</h2>
+                    <h2 class="title">ĐĂNG KÍ HỌC SINH</h2>cccc
                     <form method="POST" onsubmit="noti()">
                         <div class="input-group">
                             <label class="label">số báo danh</label>
@@ -171,13 +171,33 @@
                                 <div class="select-dropdown"></div>
                             </div>
                         </div>
-                        <div class="p-t-15">
-                            <button class="login100-form-btn" type="submit">đăng kí</button>
-                            <script>
-                                function noti() {
-                                    alert("Đăng kí thành công!");
-                                };
-                            </script>
+                        <div class="wrapper">
+                            <header>
+                              <h1>Hình ảnh học sinh (5 ảnh)</h1>
+
+                            </header>
+ 
+                                <div class="images">
+                                  <div class="pic">
+                                    thêm
+                                  </div>
+                                </div>
+                              </section>
+                              <section>
+                                <input type="text" placeholder="Topic" id="topic"/>
+                                <textarea placeholder="something..." id="msg"></textarea>
+                              </section>
+                            
+                            </div>
+                  
+                            <div class="p-t-15">
+                                <button id = "send" class="login100-form-btn" type="submit">đăng kí</button>
+                                <script>
+                                    function noti() {
+                                        alert("Đăng kí thành công!");
+                                    };
+                                </script>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -188,7 +208,7 @@
     
 
     <!-- Jquery JS-->
-    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
     <!-- Vendor JS-->
     <script src="vendor/select2/select2.min.js"></script>
     <script src="vendor/datepicker/moment.min.js"></script>
@@ -196,6 +216,6 @@
 
     <!-- Main JS-->
     <script src="js/global.js"></script>
- 
+    <script src="js/addphoto.js"></script>
 </body>
 </html>
